@@ -9,10 +9,18 @@ let USDollar = new Intl.NumberFormat('en-US', {
 });
 
 const logReceipt = (...items) => {
+  let subTotal = 0;
   let total = 0;
   items.forEach((item) => {
-    total += item.price;
-    console.log(item.descr + ' - ' +  USDollar.format(item.price));
+    subTotal = item.price + item.tax; // sub total (price + tax) of each item
+    total += item.price + item.tax; // cumulative total (price + tax) of all the items
+    console.log(item.descr + ' - '
+      +  USDollar.format(item.price)
+      + ' + '
+      +  USDollar.format(item.tax)
+      + ' = '
+      +  USDollar.format(subTotal));
+      subTotal = 0 // Reset subTotal to 0 after each item
   })
 
   console.log('Total - ' + USDollar.format(total));
@@ -20,15 +28,16 @@ const logReceipt = (...items) => {
 
 // Check
 logReceipt(
-  { descr: 'Burrito', price: 5.99 },
-  { descr: 'Chips & Salsa', price: 2.99 },
-  { descr: 'Sprite', price: 1.99 }
+  { descr: 'Burrito', price: 5.99, tax: 0.60 },
+  { descr: 'Chips & Salsa', price: 2.99, tax: 0.30 },
+  { descr: 'Sprite', price: 1.99, tax: 0.20 }
 );
 // should log something like:
 // Burrito - $5.99
 // Chips & Salsa - $2.99
 // Sprite - $1.99
 // Total - $10.97
+
 /*const obj1 = {descr: 'Burrito', price: 5.99}
 const obj2 = {descr: 'Chips & Salsa', price: 2.99}
 const obj3 = {descr: 'Sprite', price: 1.99}
